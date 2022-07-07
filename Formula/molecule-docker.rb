@@ -14,9 +14,4 @@ class MoleculeDocker < Formula
   def install
     virtualenv_install_with_resources
   end
-
-  test do
-    system "#{bin}/virtualenv", "venv_dir"
-    assert_match "venv_dir", shell_output("venv_dir/bin/python -c 'import sys; print(sys.prefix)'")
-  end
 end
