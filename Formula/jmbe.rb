@@ -15,9 +15,8 @@ class Jmbe < Formula
   end
 
   def install
-    libexec.install Dir["bin", "conf", "legal", "lib"]
-    bin.install_symlink libexec/"bin/creator" => "jmbe-creator"
-    prefix.install_metafiles
+    system "bin/creator"
+    lib.install Dir["codec/build/libs"]
   end
 
   test do
