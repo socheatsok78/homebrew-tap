@@ -1,4 +1,4 @@
-class Sdrtrunk < Formula
+class SdrTrunk < Formula
   desc "Decode, monitor, record and stream trunked radio using Software Defined Radios"
   homepage "https://github.com/DSheirer/sdrtrunk"
   license "AGPL-3.0-only"
