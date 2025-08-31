@@ -1,8 +1,8 @@
-## Formula
+## Development notes
 
 Audit and Test commands:
 ```
-HOMEBREW_NO_INSTALL_FROM_API=1 brew audit --new dsd-fme
+HOMEBREW_NO_INSTALL_FROM_API=1 brew audit --new <formula>
 HOMEBREW_NO_INSTALL_FROM_API=1 brew install --build-from-source --verbose --debug <formula>
 HOMEBREW_NO_INSTALL_FROM_API=1 brew test <formula>
 /opt/homebrew/Library/Taps/socheatsok78/homebrew-tap/Formula/<formula>.rb
