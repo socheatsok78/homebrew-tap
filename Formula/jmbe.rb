@@ -16,11 +16,23 @@ class Jmbe < Formula
 
   def install
     libexec.install Dir["bin", "conf", "legal", "lib"]
-    bin.install_symlink libexec/"bin/sdr-trunk"
+    bin.install_symlink libexec/"bin/creator" => "jmbe-creator"
     prefix.install_metafiles
   end
 
   test do
     system "true"
+  end
+
+  def caveats
+    <<~EOS
+      Audio conversion library for decoding MBE encoded audio frames.
+      Decodes IMBE 144-bit and AMBE 72-bit encoded 20 millisecond audio frames to 8 kHz 16-bit mono PCM encoded audio.
+
+      By default, binaries installed binary will be placed into:
+        #{libexec}/bin/
+      A symlink to the binary will be placed into:
+        #{bin}/jmbe-creator
+    EOS
   end
 end
