@@ -1,22 +1,16 @@
 class Jmbe < Formula
   desc "Java AMBE/IMBE audio decoder"
   homepage "https://github.com/DSheirer/jmbe"
+  url "https://github.com/DSheirer/jmbe/archive/refs/tags/v1.0.9.tar.gz"
+  sha256 "ed7eff0a31067b3a328f1874157a22c156d4ecb1d9f08ea2bc732f63daf19f61"
   license "AGPL-3.0-only"
 
-  on_macos do
-    on_intel do
-      url "https://github.com/DSheirer/jmbe/releases/download/v1.0.9/jmbe-creator-osx-x86_64-v1.0.9.zip"
-      sha256 "1ba99ce79739ba0074e4d8ad1cd86f5f3653c130b8034589e75f1dde701cbff0"
-    end
-    on_arm do
-      url "https://github.com/DSheirer/jmbe/releases/download/v1.0.9/jmbe-creator-osx-aarch64-v1.0.9.zip"
-      sha256 "cbb1e43c32acaa6b503aaf272f7589307c48e6793832b308c9ff44c1e5d025aa"
-    end
-  end
+  # depends_on "gradle@7" => :build
+  depends_on "openjdk@11" => :build
 
   def install
-    system "bin/creator"
-    # lib.install Dir["codec/build/libs"]
+    system "./gradlew", "build"
+    libexec.install "codec/build/libs/jmbe-1.0.9.jar" => "jmbe.jar"
   end
 
   test do
@@ -27,6 +21,14 @@ class Jmbe < Formula
     <<~EOS
       Audio conversion library for decoding MBE encoded audio frames.
       Decodes IMBE 144-bit and AMBE 72-bit encoded 20 millisecond audio frames to 8 kHz 16-bit mono PCM encoded audio.
+
+      PATENT NOTICE
+      ---
+      This source code is provided for educational purposes only. It is a written description of how certain voice encoding/decoding algorithms could be implemented. Executable objects compiled or derived from this package may be covered by one or more patents. Readers are strongly advised to check for any patent restrictions or licensing requirements before compiling or using this source code.
+      Note: this patent notice is verbatim from the mbelib library README at (https://github.com/szechyjs/mbelib)
+
+      The compiled JMBE library will be located at:
+        #{libexec}/jmbe.jar
     EOS
   end
 end
