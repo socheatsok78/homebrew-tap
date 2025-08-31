@@ -5,7 +5,6 @@ class Jmbe < Formula
   sha256 "ed7eff0a31067b3a328f1874157a22c156d4ecb1d9f08ea2bc732f63daf19f61"
   license "AGPL-3.0-only"
 
-  # depends_on "gradle@7" => :build
   depends_on "openjdk@11" => :build
 
   def install
