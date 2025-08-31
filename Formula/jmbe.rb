@@ -16,7 +16,7 @@ class Jmbe < Formula
 
   def install
     system "bin/creator"
-    lib.install Dir["codec/build/libs"]
+    # lib.install Dir["codec/build/libs"]
   end
 
   test do
