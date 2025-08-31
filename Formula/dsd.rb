@@ -6,6 +6,7 @@ class Dsd < Formula
 
   # no_autobump! because: :requires_manual_review
   deprecate! date: "2025-08-31", because: :unmaintained_upstream
+
   stable do
     url "https://github.com/szechyjs/dsd/archive/refs/tags/v1.6.0.tar.gz"
     sha256 "44fa3ae108d2c11b4b67388d37fc6a63e8b44fc72fdd5db7b57d9eb045a9df58"
