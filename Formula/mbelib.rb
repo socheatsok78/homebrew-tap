@@ -14,7 +14,6 @@ class Mbelib < Formula
   def install
     system "cmake", "-S", ".", "-B", "build", *std_cmake_args
     system "cmake", "--build", "build"
-    system "cmake", "--build", "build", "--target", "test"
     system "cmake", "--install", "build"
   end
 
