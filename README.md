@@ -14,4 +14,5 @@ brew tap socheatsok78/tap
 - `dsd-fme` Digital Speech Decoder - Florida Man Edition
 - `lockrun` Run cron job with overrun protection
 - `mbelib` Full Rate and Half Rate Radio Vocoder
+- `sdr-trunk` A cross-platform java application for decoding, monitoring, recording and streaming trunked mobile and related radio protocols using Software Defined Radios (SDR)
 - `sshpass` noninteractive ssh password provider
