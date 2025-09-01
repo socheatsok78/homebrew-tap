@@ -2,10 +2,16 @@
 
 @socheatsok78 personal homebrew tap
 
+[![brew test-bot](https://github.com/socheatsok78/homebrew-tap/actions/workflows/tests.yml/badge.svg)](https://github.com/socheatsok78/homebrew-tap/actions/workflows/tests.yml)
+
 ## Usage
 
 ```sh
+# Add the tap
 brew tap socheatsok78/tap
+
+# Install formula or cask
+brew install socheatsok78/tap/<formula or cask name>
 ```
 
 ## Casks
