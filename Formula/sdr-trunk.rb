@@ -14,6 +14,17 @@ class SdrTrunk < Formula
     end
   end
 
+  on_linux do
+    on_intel do
+      url "https://github.com/DSheirer/sdrtrunk/releases/download/v0.6.1/sdr-trunk-linux-x86_64-v0.6.1.zip"
+      sha256 "1e87c8c8446963df62342c9f895e7669bf0a440f258d6bb1dd94485517cb7174"
+    end
+    on_arm do
+      url "https://github.com/DSheirer/sdrtrunk/releases/download/v0.6.1/sdr-trunk-linux-aarch64-v0.6.1.zip"
+      sha256 "7784ce560200cd71031d195443d18c1f452772038b96932d35e092883685cf90"
+    end
+  end
+
   def install
     libexec.install Dir["bin", "conf", "legal", "lib"]
     bin.install_symlink libexec/"bin/sdr-trunk"
