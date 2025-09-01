@@ -1,7 +1,7 @@
 class Dsd < Formula
   desc "Digital Speech Decoder"
   homepage "https://github.com/szechyjs/dsd"
-  license "MIT"
+  license "Unlicense"
   head "https://github.com/szechyjs/dsd.git", branch: "master"
 
   # no_autobump! because: :requires_manual_review

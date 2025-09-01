@@ -4,7 +4,7 @@ class DsdFme < Formula
   url "https://github.com/lwvmobile/dsd-fme/archive/refs/heads/audio_work.tar.gz"
   version "latest"
   sha256 "b7ebbe2e2a91e1d2db422f223b989a453f14460bcae036087da32a7efd09bef1"
-  license "MIT"
+  license "Unlicense"
   head "https://github.com/lwvmobile/dsd-fme.git", branch: "audio_work"
 
   # no_autobump! because: :requires_manual_review
