@@ -9,8 +9,8 @@ class Mbelib < Formula
 
   # no_autobump! because: :requires_manual_review
 
-  conflicts_with "mbelib", because: "both install `libmbe.dylib`"
   depends_on "cmake" => :build
+  conflicts_with "mbelib", because: "both install `libmbe.dylib`"
 
   def install
     system "cmake", "-S", ".", "-B", "build", *std_cmake_args

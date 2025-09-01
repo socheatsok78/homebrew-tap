@@ -6,9 +6,8 @@ class Certstrap < Formula
   sha256 "f3ca1d642e0e59ceea5f5cd44aa049fbeed67ebde1051f0dd35cd0f3573a6884"
   license "Apache-2.0"
 
-  conflicts_with "certstrap"
-
   depends_on "go" => :build
+  conflicts_with "certstrap"
 
   def install
     system "go", "build", "-ldflags", "-s -w -X main.release=#{version}", "-trimpath", "-o", bin/"certstrap"
