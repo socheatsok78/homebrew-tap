@@ -12,10 +12,6 @@ class Jmbe < Formula
     libexec.install "codec/build/libs/jmbe-1.0.9.jar" => "jmbe.jar"
   end
 
-  test do
-    system "true"
-  end
-
   def caveats
     <<~EOS
       Audio conversion library for decoding MBE encoded audio frames.
@@ -29,5 +25,9 @@ class Jmbe < Formula
       The compiled JMBE library will be located at:
         #{libexec}/jmbe.jar
     EOS
+  end
+
+  test do
+    system "true"
   end
 end
