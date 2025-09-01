@@ -14,6 +14,7 @@ cask "chirp" do
 
   conflicts_with cask: "chirp"
   depends_on macos: ">= :high_sierra"
+  depends_on formula: "curl"
 
   app "CHIRP.app"
 
