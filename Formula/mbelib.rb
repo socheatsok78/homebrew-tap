@@ -9,6 +9,7 @@ class Mbelib < Formula
 
   # no_autobump! because: :requires_manual_review
 
+  conflicts_with "mbelib", because: "both install `libmbe.dylib`"
   depends_on "cmake" => :build
 
   def install

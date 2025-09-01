@@ -9,8 +9,9 @@ cask "chirp" do
   desc "Tool for programming amateur radio"
   homepage "https://chirp.danplanet.com/projects/chirp/wiki/Home"
 
-#   disable! date: "2025-08-05", because: "cannot be reliably fetched due to Cloudflare protections"
+  # disable! date: "2025-08-05", because: "cannot be reliably fetched due to Cloudflare protections"
 
+  conflicts_with cask: "chirp"
   depends_on macos: ">= :high_sierra"
 
   app "CHIRP.app"
