@@ -5,6 +5,7 @@ cask "chirp" do
   url "https://archive.chirpmyradio.com/chirp_next/next-#{version}/chirp-next-#{version}.app.zip",
       verified: "archive.chirpmyradio.com/",
       referer:  "https://archive.chirpmyradio.com/chirp_next/next-#{version}/"
+      using:    :homebrew_curl
   name "CHIRP"
   desc "Tool for programming amateur radio"
   homepage "https://chirp.danplanet.com/projects/chirp/wiki/Home"
