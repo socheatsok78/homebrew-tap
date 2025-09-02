@@ -1,4 +1,3 @@
-# Bottle for jmbe
 class Jmbe < Formula
   desc "Java AMBE/IMBE audio decoder"
   homepage "https://github.com/DSheirer/jmbe"
