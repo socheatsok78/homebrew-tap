@@ -5,6 +5,13 @@ class Jmbe < Formula
   sha256 "ed7eff0a31067b3a328f1874157a22c156d4ecb1d9f08ea2bc732f63daf19f61"
   license "AGPL-3.0-only"
 
+  bottle do
+    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/jmbe-1.0.9"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "06ea1d46a3781d7efa6c97de1b6763e9a2c37cd358f123d91f2b72664a570c1e"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1ff5115afa33fe73a7af16b867a651f51182c0b3b91e00cb40b3ccd87d22a8a4"
+    sha256 cellar: :any_skip_relocation, ventura:       "9a5f5ffa20bea17dab23d5abb60c74c309f1f8f7f7e5b963fd742dc1f77cf3dc"
+  end
+
   depends_on "openjdk@11" => :build
 
   def install
