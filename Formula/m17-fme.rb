@@ -7,7 +7,6 @@ class M17Fme < Formula
   license "AGPL-3.0-only"
 
   depends_on "cmake" => :build
-  depends_on "git" => :build
   depends_on "pkgconf" => :build
   depends_on "codec2"
   depends_on "libsndfile"
