@@ -7,6 +7,11 @@ class DsdFme < Formula
   license "Unlicense"
   head "https://github.com/lwvmobile/dsd-fme.git", branch: "audio_work"
 
+  bottle do
+    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/dsd-fme-latest"
+    sha256 cellar: :any, arm64_sequoia: "43e7dddff3d4146d722b539066b3633bb5b59ed157a9bdf2dac237341b36ed02"
+  end
+
   # no_autobump! because: :requires_manual_review
 
   depends_on "cmake" => :build
