@@ -4,15 +4,21 @@ class Lockrun < Formula
   url "http://unixwiz.net/tools/lockrun.c"
   version "1.1.3"
   sha256 "cea2e1e64c57cb3bb9728242c2d30afeb528563e4d75b650e8acae319a2ec547"
+  license :public_domain
 
-  conflicts_with "lockrun"
+  # The upstream website doesn't publish version information, so we check the
+  # version history comment in `lockrun.c` itself.
+  livecheck do
+    url :stable
+    regex(%r{v?(\d+(?:\.\d+)+)\s+\d{4}[/-]\d{2}[/-]\d{2}}i)
+  end
 
   def install
-    system ENV.cc, ENV.cflags, "lockrun.c", "-o", "lockrun"
+    system ENV.cc, "lockrun.c", "-o", "lockrun"
     bin.install "lockrun"
   end
 
   test do
-    system "#{bin}/lockrun", "--version"
+    system bin/"lockrun", "--version"
   end
 end
