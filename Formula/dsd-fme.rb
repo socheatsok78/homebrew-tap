@@ -10,12 +10,12 @@ class DsdFme < Formula
   # no_autobump! because: :requires_manual_review
 
   depends_on "cmake" => :build
+  depends_on "pkgconf" => :build
   depends_on "codec2"
   depends_on "itpp"
   depends_on "librtlsdr"
   depends_on "libsndfile"
   depends_on "ncurses"
-  depends_on "pkg-config"
   depends_on "pulseaudio"
   depends_on "socheatsok78/tap/mbelib"
 
