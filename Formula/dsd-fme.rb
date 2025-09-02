@@ -21,6 +21,10 @@ class DsdFme < Formula
   depends_on "socheatsok78/tap/mbelib"
 
   patch do
+    url "https://raw.githubusercontent.com/socheatsok78/homebrew-tap/8c7a62844bf1e667a6cf87297b2c3192bcd6f809/patches/dsd-fme/CMakeLists.txt.patch"
+  end
+
+  patch do
     url "https://raw.githubusercontent.com/socheatsok78/nur/189c36df96de900297a421cdaee23ee91c4548f1/pkgs/dsd-fme/disable_oss_darwin.patch"
     sha256 "c4eeed49f25be28e82aa854e65a342c6a3c043e898172e210ee2b80c323bc3bd"
   end
