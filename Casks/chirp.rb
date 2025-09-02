@@ -12,7 +12,7 @@ cask "chirp" do
 
   # disable! date: "2025-08-05", because: "cannot be reliably fetched due to Cloudflare protections"
 
-  conflicts_with cask: "chirp"
+  conflicts_with cask: "homebrew/cask/chirp"
   depends_on macos: ">= :high_sierra"
 
   app "CHIRP.app"
