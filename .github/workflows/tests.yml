@@ -9,6 +9,7 @@ on:
 jobs:
   test-bot:
     strategy:
+      fail-fast: false
       matrix:
         os: [ macos-13, macos-14, macos-15 ]
     runs-on: ${{ matrix.os }}
