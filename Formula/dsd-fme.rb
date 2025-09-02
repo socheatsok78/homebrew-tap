@@ -66,6 +66,6 @@ class DsdFme < Formula
   end
 
   test do
-    system bin/"dsd-fme", "-v"
+    system bin/"dsd-fme", "-h"
   end
 end
