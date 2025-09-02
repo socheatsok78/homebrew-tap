@@ -7,8 +7,6 @@ class Mbelib < Formula
   license "ISC"
   head "https://github.com/lwvmobile/mbelib.git", branch: "ambe_tones"
 
-  # no_autobump! because: :requires_manual_review
-
   depends_on "cmake" => :build
   conflicts_with "mbelib", because: "both install `libmbe.dylib`"
 
