@@ -1,4 +1,4 @@
-cask "chirp" do
+cask "chirp@next" do
   version "20250829"
   sha256 "fba6a7fed280a77c8d641ec5109a2bcddc821a4c1b186f95782f25de077edd02"
 
@@ -12,7 +12,7 @@ cask "chirp" do
 
   # disable! date: "2025-08-05", because: "cannot be reliably fetched due to Cloudflare protections"
 
-  conflicts_with cask: "homebrew/cask/chirp"
+  conflicts_with cask: "chirp"
   depends_on macos: ">= :high_sierra"
 
   app "CHIRP.app"
