@@ -8,7 +8,6 @@ class Mbelib < Formula
   head "https://github.com/lwvmobile/mbelib.git", branch: "ambe_tones"
 
   depends_on "cmake" => :build
-  conflicts_with "mbelib", because: "both install `libmbe.dylib`"
 
   def install
     system "cmake", "-S", ".", "-B", "build", *std_cmake_args
