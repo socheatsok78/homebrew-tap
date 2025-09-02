@@ -20,7 +20,6 @@ class DsdFme < Formula
   depends_on "itpp"
   depends_on "librtlsdr"
   depends_on "libsndfile"
-  depends_on macos: :sequoia
   depends_on "ncurses"
   depends_on "pulseaudio"
   depends_on "socheatsok78/tap/mbelib"
