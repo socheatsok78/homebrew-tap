@@ -11,6 +11,7 @@ class DsdFme < Formula
 
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
+  depends_on macos: :sequoia
   depends_on "codec2"
   depends_on "itpp"
   depends_on "librtlsdr"
