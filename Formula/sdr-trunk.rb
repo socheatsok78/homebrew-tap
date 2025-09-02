@@ -3,6 +3,13 @@ class SdrTrunk < Formula
   homepage "https://github.com/DSheirer/sdrtrunk"
   license "AGPL-3.0-only"
 
+  bottle do
+    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/sdr-trunk-0.6.1"
+    rebuild 1
+    sha256 cellar: :any, arm64_sequoia: "1a4061fc64d109b8f018160964266477958cd5d9929c80f73b7548451af1fbd4"
+    sha256 cellar: :any, ventura:       "46ee8b320ca8e7d19f6b158f1b11e4eb84ee35bb4116b0d3394b01e355a1dbc2"
+  end
+
   on_macos do
     on_intel do
       url "https://github.com/DSheirer/sdrtrunk/releases/download/v0.6.1/sdr-trunk-osx-x86_64-v0.6.1.zip"
