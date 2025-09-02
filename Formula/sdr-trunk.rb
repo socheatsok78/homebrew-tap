@@ -5,9 +5,9 @@ class SdrTrunk < Formula
 
   bottle do
     root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/sdr-trunk-0.6.1"
-    rebuild 1
-    sha256 cellar: :any, arm64_sequoia: "1a4061fc64d109b8f018160964266477958cd5d9929c80f73b7548451af1fbd4"
-    sha256 cellar: :any, ventura:       "46ee8b320ca8e7d19f6b158f1b11e4eb84ee35bb4116b0d3394b01e355a1dbc2"
+    sha256 cellar: :any, arm64_sequoia: "126f8057aeca85e73c0d610101110ea0b4af2790a45f8a96ec4382bb9af9766a"
+    sha256 cellar: :any, arm64_sonoma:  "19d551290c534f6d6a3f0b1980102fd44eb57861710ca8d084755e520c5486e1"
+    sha256 cellar: :any, ventura:       "2a1ce2c7067b5b49fd868ce778437ba30a194641723de9f030d8aa3c0b52025d"
   end
 
   on_macos do
