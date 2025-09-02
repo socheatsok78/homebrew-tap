@@ -34,4 +34,17 @@ class SdrTrunk < Formula
   test do
     system "true"
   end
+
+  def caveats
+    <<~EOS
+      A cross-platform java application for decoding, monitoring, recording and streaming trunked mobile and related radio protocols using Software Defined Radios (SDR)
+
+      JMBE version 1.0.9+ is required for decoding APCO25 Phase 1/2 and DMR digital audio.
+      
+      To run the application, run the following command:
+        $ sdr-trunk
+      or, if that doesn't work,
+        $ #{bin}/sdr-trunk
+    EOS
+  end
 end
