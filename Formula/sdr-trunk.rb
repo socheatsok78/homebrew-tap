@@ -31,10 +31,6 @@ class SdrTrunk < Formula
     prefix.install_metafiles
   end
 
-  test do
-    system "true"
-  end
-
   def caveats
     <<~EOS
       A cross-platform java application for decoding, monitoring, recording and streaming trunked mobile and related radio protocols using Software Defined Radios (SDR)
@@ -46,5 +42,9 @@ class SdrTrunk < Formula
       or, if that doesn't work,
         $ #{bin}/sdr-trunk
     EOS
+  end
+
+  test do
+    system "true"
   end
 end
