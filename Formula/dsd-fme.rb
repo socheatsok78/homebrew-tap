@@ -12,11 +12,11 @@ class DsdFme < Formula
   depends_on "cmake" => :build
   depends_on "codec2"
   depends_on "itpp"
+  depends_on "librtlsdr"
   depends_on "libsndfile"
   depends_on "ncurses"
   depends_on "pkg-config"
   depends_on "pulseaudio"
-  depends_on "rtl-sdr"
   depends_on "socheatsok78/tap/mbelib"
 
   patch do
