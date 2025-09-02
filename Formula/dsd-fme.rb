@@ -7,8 +7,6 @@ class DsdFme < Formula
   license "Unlicense"
   head "https://github.com/lwvmobile/dsd-fme.git", branch: "audio_work"
 
-  # no_autobump! because: :requires_manual_review
-
   depends_on "cmake" => :build
   depends_on "codec2"
   depends_on "itpp"
