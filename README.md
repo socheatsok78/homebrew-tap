@@ -15,9 +15,10 @@ brew install socheatsok78/tap/<formula or cask name>
 ```
 
 ## Casks
-- `chirp` - Tool for programming amateur radio
+- `chirp@next` - Tool for programming amateur radio
 - `khmer-unicode-layout` - Khmer Unicode Keyboard Layout
 - `octoscreen` - An OS X screensaver with octicons
+- `sparksdr` - Cross platform sdr application for Hermes Lite and Open HPSDR compatible radios (Red Pitya, Apache labs) and SDRplay.
 
 ## Formulae
 
