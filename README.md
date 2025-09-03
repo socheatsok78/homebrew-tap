@@ -16,6 +16,7 @@ brew install socheatsok78/tap/<formula or cask name>
 
 ## Casks
 - `chirp` - Tool for programming amateur radio
+- `khmer-unicode-layout` - Khmer Unicode Keyboard Layout
 - `octoscreen` - An OS X screensaver with octicons
 
 ## Formulae
