@@ -8,9 +8,10 @@ class Jmbe < Formula
 
   bottle do
     root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/jmbe-1.0.9"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "06ea1d46a3781d7efa6c97de1b6763e9a2c37cd358f123d91f2b72664a570c1e"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1ff5115afa33fe73a7af16b867a651f51182c0b3b91e00cb40b3ccd87d22a8a4"
-    sha256 cellar: :any_skip_relocation, ventura:       "9a5f5ffa20bea17dab23d5abb60c74c309f1f8f7f7e5b963fd742dc1f77cf3dc"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a4f9d6324a5d840f8a636ab5fe0a906bf3609b9fec175d679f180332cc4d6633"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "dbc6d19300be8e1f332d961433ed7142815b41df21d409b107a7e8342612f44a"
+    sha256 cellar: :any_skip_relocation, ventura:       "bb6e2309ac32d767e1946cd7b0324da11fb4c444efdbe3ed2c272f408611554e"
   end
 
   depends_on "openjdk@11" => :build
