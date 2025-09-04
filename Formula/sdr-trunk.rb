@@ -10,6 +10,8 @@ class SdrTrunk < Formula
     sha256 cellar: :any, ventura:       "2a1ce2c7067b5b49fd868ce778437ba30a194641723de9f030d8aa3c0b52025d"
   end
 
+  depends_on "socheatsok78/tap/jmbe"
+
   on_macos do
     on_intel do
       url "https://github.com/DSheirer/sdrtrunk/releases/download/v0.6.1/sdr-trunk-osx-x86_64-v0.6.1.zip"
