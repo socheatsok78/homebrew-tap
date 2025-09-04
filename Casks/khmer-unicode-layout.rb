@@ -6,6 +6,11 @@ cask "khmer-unicode-layout" do
   name "Khmer Unicode Keyboard Layout"
   homepage "https://github.com/socheatsok78/khmer-unicode-keyboard-for-macos"
 
+  livecheck do
+    url "https://github.com/socheatsok78/khmer-unicode-keyboard-for-macos"
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
+
   pkg "Khmer.Unicode.pkg", allow_untrusted: true
 
   uninstall pkgutil: "com.github.socheatsok78.khmer-unicode"
