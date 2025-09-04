@@ -17,8 +17,10 @@ cask "sdrtrunk" do
 
   depends_on formula: "socheatsok78/tap/jmbe"
 
-  suite "sdr-trunk-osx-#{arch}-v#{version}"
-  binary "#{appdir}/sdr-trunk-osx-#{arch}-v#{version}/bin/sdr-trunk"
+  jmbe = Formula["socheatsok78/tap/jmbe"]
+
+  suite "sdr-trunk-osx-#{arch}-v#{version}", target: "SDRTrunk v#{version}"
+  binary "#{appdir}/SDRTrunk v#{version}/bin/sdr-trunk"
 
   zap trash: "~/SDRTrunk"
 
@@ -27,11 +29,12 @@ cask "sdrtrunk" do
       A cross-platform java application for decoding, monitoring, recording and streaming trunked mobile and related radio protocols using Software Defined Radios (SDR)
 
       JMBE version 1.0.9+ is required for decoding APCO25 Phase 1/2 and DMR digital audio.
+        You can find it here: #{jmbe.opt_libexec}/
 
       To run the application, run the following command:
         $ sdr-trunk
       or, if that doesn't work,
-        $ #{appdir}/sdr-trunk-osx-#{arch}-v#{version}/bin/sdr-trunk
+        $ #{appdir}/SDRTrunk v#{version}/bin/sdr-trunk
     EOS
   end
 end
