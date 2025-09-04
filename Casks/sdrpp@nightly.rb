@@ -1,4 +1,4 @@
-cask "sdrpp" do
+cask "sdrpp@nightly" do
   arch arm: "arm", intel: "intel"
 
   version "nightly"
