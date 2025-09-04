@@ -5,7 +5,7 @@ cask "sdrpp" do
   sha256 :no_check
 
   url "https://github.com/AlexandreRouma/SDRPlusPlus/releases/download/nightly/sdrpp_macos_#{arch}.zip"
-  name "sdrpp"
+  name "SDR++"
   desc "Cross-Platform SDR Software"
   homepage "https://github.com/AlexandreRouma/SDRPlusPlus"
 
