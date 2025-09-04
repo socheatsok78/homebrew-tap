@@ -1,7 +1,8 @@
 class Jmbe < Formula
   desc "Java AMBE/IMBE audio decoder"
   homepage "https://github.com/DSheirer/jmbe"
-  url "https://github.com/DSheirer/jmbe/archive/refs/tags/v1.0.9.tar.gz"
+  version = "1.0.9"
+  url "https://github.com/DSheirer/jmbe/archive/refs/tags/v#{version}.tar.gz"
   sha256 "ed7eff0a31067b3a328f1874157a22c156d4ecb1d9f08ea2bc732f63daf19f61"
   license "AGPL-3.0-only"
 
@@ -16,7 +17,7 @@ class Jmbe < Formula
 
   def install
     system "./gradlew", "build"
-    libexec.install "codec/build/libs/jmbe-1.0.9.jar" => "jmbe.jar"
+    libexec.install "codec/build/libs/jmbe-#{version}.jar"
   end
 
   def caveats
@@ -30,7 +31,7 @@ class Jmbe < Formula
       Note: this patent notice is verbatim from the mbelib library README at (https://github.com/szechyjs/mbelib)
 
       The compiled JMBE library will be located at:
-        #{libexec}/jmbe.jar
+        #{libexec}/jmbe-#{version}.jar
     EOS
   end
 
