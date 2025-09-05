@@ -18,6 +18,7 @@ brew install socheatsok78/tap/<formula or cask name>
 - `chirp@next` - Tool for programming amateur radio
 - `khmer-unicode-layout` - Khmer Unicode Keyboard Layout
 - `octoscreen` - An OS X screensaver with octicons
+- `sdrangel` - SDR Rx/Tx software for Airspy, Airspy HF+, BladeRF, HackRF, LimeSDR, PlutoSDR, RTL-SDR, SDRplay and FunCube
 - `sdrpp` - Cross-Platform SDR Software
 - `sdrtrunk` - A cross-platform java application for decoding, monitoring, recording and streaming trunked mobile and related radio protocols using Software Defined Radios (SDR), alternative cask to `sdr-trunk` formula
 - `sparksdr` - Cross platform sdr application for Hermes Lite and Open HPSDR compatible radios (Red Pitya, Apache labs) and SDRplay.
