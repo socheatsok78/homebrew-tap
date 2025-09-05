@@ -9,6 +9,11 @@ cask "sdrpp@nightly" do
   desc "Cross-Platform SDR Software"
   homepage "https://github.com/AlexandreRouma/SDRPlusPlus"
 
+  livecheck do
+    url "https://github.com/AlexandreRouma/SDRPlusPlus"
+    strategy :github_latest
+  end
+
   suite "SDR++.app"
 
   zap trash: "~/Library/Application Support/sdrpp"
