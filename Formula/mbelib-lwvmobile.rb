@@ -8,10 +8,11 @@ class MbelibLwvmobile < Formula
   head "https://github.com/lwvmobile/mbelib.git", branch: "ambe_tones"
 
   bottle do
-    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/mbelib-lwvmobile-2022.08.25"
-    sha256 cellar: :any, arm64_sequoia: "a5c8e833af451fc629c21cb3d64a65065c2428c04a9b3d26d8ab562a4ad68bc6"
-    sha256 cellar: :any, arm64_sonoma:  "a12ba25aa67f3fd1081e2c7206bee86eeee48f5495c023b846daf7fc1d82bedc"
-    sha256 cellar: :any, ventura:       "2801cc7b29f54fa6a59ca539fedb455016b7c0072e4347043b725757a04cd93d"
+    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/mbelib-lwvmobile-2022-08-25"
+    rebuild 1
+    sha256 cellar: :any, arm64_sequoia: "508eb1b00c6bd0f5de84c6c3dd2eac4bd70ee9c2d48f3e140001168e377fabee"
+    sha256 cellar: :any, arm64_sonoma:  "74651cb0d433581b843db1c831983c906b69af541fb6ffd9247878315ef1aa70"
+    sha256 cellar: :any, ventura:       "75f9ce9e561ca7697a929e0d07bbb04bf0d9f4b6292030d4cc7f66f32884ada0"
   end
 
   depends_on "cmake" => :build
