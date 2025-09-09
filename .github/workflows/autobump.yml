@@ -43,9 +43,10 @@ jobs:
           CASKS: ${{ inputs.casks }}
         continue-on-error: true
         run: |
-          BREW_BUMP=(brew bump --no-fork --open-pr --casks)
+          set -x
+          BREW_BUMP=(brew bump --tap="$GITHUB_REPOSITORY" --no-fork --open-pr --casks)
           if [[ -n "${CASKS-}" ]]; then
             xargs "${BREW_BUMP[@]}" <<<"${CASKS}"
           else
-            "${BREW_BUMP[@]}" --auto --tap="$GITHUB_REPOSITORY"
+            "${BREW_BUMP[@]}" --auto
           fi
