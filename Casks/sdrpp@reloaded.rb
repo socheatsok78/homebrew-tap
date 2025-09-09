@@ -9,11 +9,6 @@ cask "sdrpp@reloaded" do
   desc "Cross-Platform SDR Software (Reloaded)"
   homepage "https://github.com/socheatsok78/SDRPlusPlus"
 
-  livecheck do
-    url "https://github.com/socheatsok78/SDRPlusPlus"
-    strategy :github_latest
-  end
-
   suite "SDR++.app", target: "SDR++Reloaded.app"
 
   zap trash: "~/Library/Application Support/sdrpp"
