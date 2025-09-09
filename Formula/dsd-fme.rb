@@ -3,7 +3,7 @@ class DsdFme < Formula
   homepage "https://github.com/lwvmobile/dsd-fme"
   url "https://github.com/lwvmobile/dsd-fme/archive/refs/heads/audio_work.tar.gz"
   version "latest"
-  sha256 "b7ebbe2e2a91e1d2db422f223b989a453f14460bcae036087da32a7efd09bef1"
+  sha256 "b0f44d07f25d6c8e5f22b0cdba0485b3c02fbdb6c25936b4d3cb3ec84a399e9c"
   license "Unlicense"
   head "https://github.com/lwvmobile/dsd-fme.git", branch: "audio_work"
 
