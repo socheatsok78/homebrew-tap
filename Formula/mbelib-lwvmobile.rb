@@ -3,7 +3,7 @@ class MbelibLwvmobile < Formula
   homepage "https://github.com/lwvmobile/mbelib"
   url "https://github.com/lwvmobile/mbelib.git",
       revision: "30dc79074ca022366a27d705b8023011d9600339"
-  version "latest"
+  version "2022.08.25"
   sha256 "885e2886a49646d4ab9667aae351e0a4a294505f619b6ed8393415e1607c66b9"
   license "ISC"
   head "https://github.com/lwvmobile/mbelib.git", branch: "ambe_tones"
