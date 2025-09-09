@@ -1,4 +1,4 @@
-class Mbelib < Formula
+class MbelibLwvmobile < Formula
   desc "Full Rate and Half Rate Radio Vocoder"
   homepage "https://github.com/lwvmobile/mbelib"
   url "https://github.com/lwvmobile/mbelib/archive/refs/heads/ambe_tones.tar.gz"
