@@ -1,7 +1,8 @@
 class MbelibLwvmobile < Formula
   desc "Full Rate and Half Rate Radio Vocoder"
   homepage "https://github.com/lwvmobile/mbelib"
-  url "https://github.com/lwvmobile/mbelib/archive/refs/heads/ambe_tones.tar.gz"
+  url "https://github.com/lwvmobile/mbelib.git",
+      revision: "30dc79074ca022366a27d705b8023011d9600339"
   version "latest"
   sha256 "885e2886a49646d4ab9667aae351e0a4a294505f619b6ed8393415e1607c66b9"
   license "ISC"
