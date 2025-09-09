@@ -6,6 +6,7 @@ class M17Fme < Formula
   version "2025.09.08"
   sha256 "652ae2d2232dcbcfbcabd88942663baf3c56139ef7d7861a5625b80b8d26f467"
   license "AGPL-3.0-only"
+  head "https://github.com/lwvmobile/m17-fme.git", branch: "main"
 
   bottle do
     root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/m17-fme-latest"
