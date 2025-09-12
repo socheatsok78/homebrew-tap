@@ -13,6 +13,7 @@ class MbelibLwvmobile < Formula
     sha256 cellar: :any, arm64_sequoia: "508eb1b00c6bd0f5de84c6c3dd2eac4bd70ee9c2d48f3e140001168e377fabee"
     sha256 cellar: :any, arm64_sonoma:  "74651cb0d433581b843db1c831983c906b69af541fb6ffd9247878315ef1aa70"
     sha256 cellar: :any, ventura:       "75f9ce9e561ca7697a929e0d07bbb04bf0d9f4b6292030d4cc7f66f32884ada0"
+    # tahoe:
   end
 
   depends_on "cmake" => :build
