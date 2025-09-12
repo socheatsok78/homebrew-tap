@@ -11,6 +11,7 @@ class Certstrap < Formula
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "dccea7ed2688e36bee46737f1adde94bd01b9e98010ed98b5e5e0c09e8111267"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0878f3db7edd13f81e0425b7cc2d115c91d4d1a55368028f9258a640406890e1"
     sha256 cellar: :any_skip_relocation, ventura:       "2910eaac0b96831709cdd6290ef1a391bec089f5da82b13ea0134f5d82e11ac8"
+    # tahoe:
   end
 
   depends_on "go" => :build
