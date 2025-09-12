@@ -9,6 +9,7 @@ class Sshpass < Formula
     sha256 cellar: :any_skip_relocation, arm64_sequoia: "613cac96f2530cdae59b45589a67e9842f9fe5d2a69415f974ac7078ae6173e8"
     sha256 cellar: :any_skip_relocation, arm64_sonoma:  "03f14734bd136c187bff77a08d39233c30bd8ddffc937e46eb694ef03a4fd95e"
     sha256 cellar: :any_skip_relocation, ventura:       "2458cd3583ac0504f1a4a1e0842acdf84563ca3ba51a401f0c415ef50633a208"
+    # tahoe:
   end
 
   def install

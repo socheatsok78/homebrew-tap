@@ -4,7 +4,7 @@ class Jmbe < Formula
   version = "1.0.9"
   url "https://github.com/DSheirer/jmbe/archive/refs/tags/v#{version}.tar.gz"
   sha256 "ed7eff0a31067b3a328f1874157a22c156d4ecb1d9f08ea2bc732f63daf19f61"
-  license "AGPL-3.0-only"
+  license "GPL-3.0-only"
 
   bottle do
     root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/jmbe-1.0.9"

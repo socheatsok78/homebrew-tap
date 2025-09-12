@@ -4,7 +4,7 @@ class DsdFme < Formula
   url "https://github.com/lwvmobile/dsd-fme.git",
       revision: "9acd8c981e56096197a198df5bfa5c8e5cfbaa3a"
   version "2025-09-02"
-  license "Unlicense"
+  license "ISC"
   head "https://github.com/lwvmobile/dsd-fme.git", branch: "audio_work"
 
   bottle do
