@@ -9,10 +9,10 @@ class DsdFme < Formula
 
   bottle do
     root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/dsd-fme-2025-09-02"
-    rebuild 1
-    sha256 cellar: :any, arm64_sequoia: "dbed055ade89d67708ec4d9c74ab8001de3762c2befee22ad9590e0f1d9c4b95"
-    sha256 cellar: :any, arm64_sonoma:  "585565f702456de00dfb66e608cbbc18b1cee5a811dc37acc5d125ac276ef461"
-    sha256 cellar: :any, ventura:       "956813ab901b3171299390176a86efe1af9cca9713a932e74687788953556bce"
+    rebuild 2
+    sha256 cellar: :any, arm64_tahoe:   "2d7327fa05cdf1637c851f9b6e55a071840e4b62c022f8eaccaaf71876fd2303"
+    sha256 cellar: :any, arm64_sequoia: "8a3559d3a21af0f3994f5d06d380359db73822284d71fa44a66bb7331f44a3bf"
+    sha256 cellar: :any, arm64_sonoma:  "632af347723c3b8288660c069f033749a58a096f6e44160e6c3b756786d251d2"
   end
 
   # no_autobump! because: :requires_manual_review
