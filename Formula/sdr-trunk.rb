@@ -5,10 +5,10 @@ class SdrTrunk < Formula
 
   bottle do
     root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/sdr-trunk-0.6.1"
-    rebuild 1
-    sha256 cellar: :any, arm64_sequoia: "fe204f917628663c0c0afdc05ff428824b5483e8694ba4dcf8528f05284000dd"
-    sha256 cellar: :any, arm64_sonoma:  "b375c9f819f5be361873421a9c7ecb3476485c27befa979fae1638dcf078879e"
-    sha256 cellar: :any, ventura:       "a5c7c830d58a8f03dfa399d8987f473b5fd7972b29045983f018f8299460b4b0"
+    rebuild 2
+    sha256 cellar: :any, arm64_tahoe:   "bcef1185495c9a5ca76fc6964df34a86667562a1c5c7e1e3ad5f518163d56973"
+    sha256 cellar: :any, arm64_sequoia: "bf8ca781e235a00f125dcdd5e8f2463fb42e9c7cf548352811d6aced4957b138"
+    sha256 cellar: :any, arm64_sonoma:  "be1d7179f9d7e3e4df1e911478cd2be9b47c2b11c5102944df0cc75a0a092559"
   end
 
   depends_on "gstreamer"
