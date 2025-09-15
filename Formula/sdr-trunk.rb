@@ -11,6 +11,8 @@ class SdrTrunk < Formula
     sha256 cellar: :any, ventura:       "a5c7c830d58a8f03dfa399d8987f473b5fd7972b29045983f018f8299460b4b0"
   end
 
+  depends_on "gstreamer"
+  depends_on "libvisual-plugins"
   depends_on "socheatsok78/tap/jmbe"
 
   on_macos do
