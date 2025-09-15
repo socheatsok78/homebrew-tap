@@ -9,11 +9,10 @@ class MbelibLwvmobile < Formula
 
   bottle do
     root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/mbelib-lwvmobile-2022-08-25"
-    rebuild 1
-    sha256 cellar: :any, arm64_sequoia: "508eb1b00c6bd0f5de84c6c3dd2eac4bd70ee9c2d48f3e140001168e377fabee"
-    sha256 cellar: :any, arm64_sonoma:  "74651cb0d433581b843db1c831983c906b69af541fb6ffd9247878315ef1aa70"
-    sha256 cellar: :any, ventura:       "75f9ce9e561ca7697a929e0d07bbb04bf0d9f4b6292030d4cc7f66f32884ada0"
-    # tahoe:
+    rebuild 2
+    sha256 cellar: :any, arm64_tahoe:   "ca4556f83167b511756d8cad384608572107d41abd20bd4d7e7a40940bcc438a"
+    sha256 cellar: :any, arm64_sequoia: "a5ff2c14182f426dbdc6685c2d79af4d16274f28f47d344bfa967d850a83f3fe"
+    sha256 cellar: :any, arm64_sonoma:  "0aa84e285d242c164e55cbeaf2495a71c2d307c3a231e4b945521f7cea46172c"
   end
 
   depends_on "cmake" => :build
