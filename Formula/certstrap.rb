@@ -8,10 +8,10 @@ class Certstrap < Formula
 
   bottle do
     root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/certstrap-latest"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "dccea7ed2688e36bee46737f1adde94bd01b9e98010ed98b5e5e0c09e8111267"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0878f3db7edd13f81e0425b7cc2d115c91d4d1a55368028f9258a640406890e1"
-    sha256 cellar: :any_skip_relocation, ventura:       "2910eaac0b96831709cdd6290ef1a391bec089f5da82b13ea0134f5d82e11ac8"
-    # tahoe:
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "12e5a94f205fb530571f5c265e4c5d81232e19c055b0af25dd14f236dfb880ef"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "29d8f8a68924d1d53b9fb5ab2a927780c778cc37d754ff32c8739497a61993c9"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f3a5855e01539791eaf3764caf787946db1f929b61c725468abb89d400296261"
   end
 
   depends_on "go" => :build
