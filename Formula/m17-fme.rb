@@ -2,8 +2,8 @@ class M17Fme < Formula
   desc "Standalone M17 Project Voice and Data Packet Encoder and Decoder"
   homepage "https://github.com/lwvmobile/m17-fme"
   url "https://github.com/lwvmobile/m17-fme.git",
-      revision: "13c93705ef988e8b3514a5bf83dc9cdded39ed79"
-  version "2025-09-08"
+      revision: "2f2aad6c0e62ba2bcfbef4ffbf9b69ccd77403e8"
+  version "2025-10-06"
   sha256 "652ae2d2232dcbcfbcabd88942663baf3c56139ef7d7861a5625b80b8d26f467"
   license "GPL-3.0-only"
   head "https://github.com/lwvmobile/m17-fme.git", branch: "main"
