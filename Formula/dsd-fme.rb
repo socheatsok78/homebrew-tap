@@ -2,8 +2,8 @@ class DsdFme < Formula
   desc "Digital Speech Decoder - Florida Man Edition"
   homepage "https://github.com/lwvmobile/dsd-fme"
   url "https://github.com/lwvmobile/dsd-fme.git",
-      revision: "cf032ab955233b95d2356f982d9bc4ac69523060"
-  version "2025-10-09"
+      revision: "eb76ea20399a76a0d19a36dd162cbd7a4111eb2a"
+  version "2025-10-31"
   license "ISC"
   head "https://github.com/lwvmobile/dsd-fme.git", branch: "audio_work"
 
