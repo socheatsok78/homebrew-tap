@@ -1,11 +1,11 @@
 cask "sdrangel" do
-  arch arm: "mac-14.7.6_arm64", intel: "mac-13.7.6_x86_64"
+  arch arm: "-480-g11074ac87_mac-14.7.6_arm64", intel: "_mac-13.7.6_x86_64"
 
-  version "7.22.8"
-  sha256 arm:   "26fb066aa7881d2acbb596b967cd9c5837181fccd8040fbcb0218a8ecfa694a8",
-         intel: "f221b5ee5faaefc4c656625765b6126d5d36318677579674163010a1d57c7574"
+  version "7.22.9"
+  sha256 arm:   "082bb21cfa74ed56a82c928c82f8a418ef9852bb5d542797e4d0ef49e20aa2c8",
+         intel: "af12179ca22ed510bbef9f35e690f599b5333c7dda469c9cc077bcbf94bc3e39"
 
-  url "https://github.com/f4exb/sdrangel/releases/download/v#{version}/sdrangel-#{version}_#{arch}.dmg",
+  url "https://github.com/f4exb/sdrangel/releases/download/v#{version}/sdrangel-#{version}#{arch}.dmg",
       verified: "github.com/f4exb/sdrangel/"
   name "SDRangel"
   desc "SDR Rx/Tx software and signal analyzer frontend to various hardware"
