@@ -8,10 +8,10 @@ class M17Fme < Formula
   head "https://github.com/lwvmobile/m17-fme.git", branch: "main"
 
   bottle do
-    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/m17-fme-2025-10-06"
-    sha256 cellar: :any, arm64_tahoe:   "213257ab700e9a46a94c4651f560bdd9f45a18abbd36fa716c3004513155dfb8"
-    sha256 cellar: :any, arm64_sequoia: "7cbd45f7cc2c53327104347f762443cdaf803e1a0326611671e7bcf588719137"
-    sha256 cellar: :any, arm64_sonoma:  "483d0cfba11f0564d1a0321624ffa580fc54e2ca75bbf87d2cf3171f9f67b2f6"
+    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/m17-fme-2025-11-11"
+    sha256 cellar: :any, arm64_tahoe:   "53b044f5e9a6518c7de958ec34b5e6ae59746e2ab3980e3f542e7eee17cbbc3c"
+    sha256 cellar: :any, arm64_sequoia: "8a49b4eba40c5bde274d1e29520138b4742d8f1b43f146ee712e1ddbd5787ce1"
+    sha256 cellar: :any, arm64_sonoma:  "9806c624784a274e43c36b7a2a40833e6c117c836c719e6b636c1be7a0054c14"
   end
 
   depends_on "cmake" => :build
