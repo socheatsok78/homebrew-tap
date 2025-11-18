@@ -9,6 +9,11 @@ class Gon < Formula
   depends_on "go" => :build
   depends_on :macos
 
+  patch do
+    url "https://github.com/mitchellh/gon/compare/master...winash:go-notarize:master.patch"
+    sha256 "b6d8a86aa069c119f960a37cec61428fa5b90ec3ddb5c6b679a6a6775ea86e00"
+  end
+
   def install
     system "go", "build", "-ldflags", "-s -w -X main.version=#{version}", "-trimpath", "-o", bin/"gon", "./cmd/gon"
     prefix.install_metafiles
