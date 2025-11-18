@@ -28,6 +28,7 @@ brew install socheatsok78/tap/<formula or cask name>
 
 - `certstrap` - Tools to bootstrap CAs, certificate requests, and signed certificates.
 - `dsd-fme` - Digital Speech Decoder - Florida Man Edition
+- `gon` - Sign, notarize, and package macOS CLI applications written in any language
 - `jmbe` - Java AMBE/IMBE audio decoder
 - `lockrun` - Run cron job with overrun protection
 - `m17-fme` - Standalone M17 Project Voice and Data Packet Encoder and Decoder
