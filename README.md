@@ -33,5 +33,6 @@ brew install socheatsok78/tap/<formula or cask name>
 - `lockrun` - Run cron job with overrun protection
 - `m17-fme` - Standalone M17 Project Voice and Data Packet Encoder and Decoder
 - `mbelib` - Full Rate and Half Rate Radio Vocoder
+- `quill` - Simple mac binary signing from any platform
 - `sdr-trunk` - A cross-platform java application for decoding, monitoring, recording and streaming trunked mobile and related radio protocols using Software Defined Radios (SDR)
 - `sshpass` - noninteractive ssh password provider
