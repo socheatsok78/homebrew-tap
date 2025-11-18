@@ -1,0 +1,869 @@
+From 042e5b6776573c7b1758bfb39d5b81ba9db94401 Mon Sep 17 00:00:00 2001
+From: Ashwin <ashwin@acceldata.io>
+Date: Fri, 10 Oct 2025 15:20:51 +0530
+Subject: [PATCH] Update to use notarytool
+
+---
+ cmd/gon/item.go           |  51 +++++++++++--
+ cmd/gon/main.go           |  81 ++++++++++++++------
+ internal/config/config.go |  17 ++++-
+ notarize/info.go          |  72 +++++++++++++-----
+ notarize/log.go           |  57 ++++++++++----
+ notarize/notarize.go      | 151 ++++++++++++++++----------------------
+ notarize/upload.go        | 113 ++++++++++++++++++++++------
+ package/dmg/dmg.go        |   4 +-
+ 8 files changed, 369 insertions(+), 177 deletions(-)
+
+diff --git a/cmd/gon/item.go b/cmd/gon/item.go
+index 9227a13..0820004 100644
+--- a/cmd/gon/item.go
++++ b/cmd/gon/item.go
+@@ -3,6 +3,7 @@ package main
+ import (
+ 	"context"
+ 	"os"
++	"strings"
+ 	"sync"
+
+ 	"github.com/fatih/color"
+@@ -63,15 +64,26 @@ func (i *item) notarize(ctx context.Context, opts *processOptions) error {
+ 		bundleId = opts.Config.BundleId
+ 	}
+
++	// Determine authentication method
++	teamId := opts.Config.AppleId.TeamId
++	// Backwards compatibility: fall back to Provider if TeamId is not set
++	if teamId == "" && opts.Config.AppleId.Provider != "" {
++		teamId = opts.Config.AppleId.Provider
++	}
++
++	// Expand password if it uses @env: or @keychain: syntax
++	password := expandPassword(opts.Config.AppleId.Password)
++
+ 	// Start notarization
+ 	_, _, err := notarize.Notarize(ctx, &notarize.Options{
+-		File:        i.Path,
+-		DeveloperId: opts.Config.AppleId.Username,
+-		Password:    opts.Config.AppleId.Password,
+-		Provider:    opts.Config.AppleId.Provider,
+-		Logger:      opts.Logger.Named("notarize"),
+-		Status:      &statusHuman{Prefix: opts.Prefix, Lock: lock},
+-		UploadLock:  opts.UploadLock,
++		File:            i.Path,
++		DeveloperId:     opts.Config.AppleId.Username,
++		Password:        password,
++		TeamId:          teamId,
++		KeychainProfile: opts.Config.AppleId.KeychainProfile,
++		Logger:          opts.Logger.Named("notarize"),
++		Status:          &statusHuman{Prefix: opts.Prefix, Lock: lock},
++		UploadLock:      opts.UploadLock,
+ 	})
+
+ 	// Save the error state. We don't save the notarization result yet
+@@ -141,3 +153,28 @@ func (i *item) String() string {
+
+ 	return result
+ }
++
++// expandPassword expands password references like @env:VAR_NAME or @keychain:KEY_NAME
++func expandPassword(password string) string {
++	if password == "" {
++		return password
++	}
++
++	// Handle @env:VARIABLE_NAME
++	if strings.HasPrefix(password, "@env:") {
++		envVar := strings.TrimPrefix(password, "@env:")
++		if value := os.Getenv(envVar); value != "" {
++			return value
++		}
++		// If env var not found, return as-is (notarytool will handle @env: syntax)
++		return password
++	}
++
++	// Handle @keychain:KEY_NAME - notarytool handles this natively
++	if strings.HasPrefix(password, "@keychain:") {
++		return password
++	}
++
++	// Plain password, return as-is
++	return password
++}
+diff --git a/cmd/gon/main.go b/cmd/gon/main.go
+index 26213bf..5f23bdf 100644
+--- a/cmd/gon/main.go
++++ b/cmd/gon/main.go
+@@ -145,34 +145,69 @@ func realMain() int {
+ 	if cfg.AppleId == nil {
+ 		cfg.AppleId = &config.AppleId{}
+ 	}
+-	if cfg.AppleId.Username == "" {
+-		appleIdUsername, ok := os.LookupEnv("AC_USERNAME")
+-		if !ok {
+-			color.New(color.Bold, color.FgRed).Fprintf(os.Stdout, "❗️ No apple_id username provided\n")
+-			color.New(color.FgRed).Fprintf(os.Stdout,
+-				"An Apple ID username must be specified in the `apple_id` block or\n"+
+-					"it must exist in the environment as AC_USERNAME,\n"+
+-					"otherwise we won't be able to authenticate with Apple to notarize.\n")
+-			return 1
++
++	// Check if using keychain profile or direct credentials
++	usingKeychainProfile := cfg.AppleId.KeychainProfile != ""
++
++	if !usingKeychainProfile {
++		// Direct credentials mode - validate all required fields
++		if cfg.AppleId.Username == "" {
++			appleIdUsername, ok := os.LookupEnv("AC_USERNAME")
++			if !ok {
++				color.New(color.Bold, color.FgRed).Fprintf(os.Stdout, "❗️ No apple_id username provided\n")
++				color.New(color.FgRed).Fprintf(os.Stdout,
++					"An Apple ID username must be specified in the `apple_id` block or\n"+
++						"it must exist in the environment as AC_USERNAME,\n"+
++						"otherwise we won't be able to authenticate with Apple to notarize.\n"+
++						"\n"+
++						"Alternatively, you can use a keychain profile with the `keychain_profile` option.\n")
++				return 1
++			}
++
++			cfg.AppleId.Username = appleIdUsername
+ 		}
+
+-		cfg.AppleId.Username = appleIdUsername
+-	}
++		if cfg.AppleId.Password == "" {
++			if _, ok := os.LookupEnv("AC_PASSWORD"); !ok {
++				color.New(color.Bold, color.FgRed).Fprintf(os.Stdout, "❗️ No apple_id password provided\n")
++				color.New(color.FgRed).Fprintf(os.Stdout,
++					"An Apple ID password (or lookup directive) must be specified in the\n"+
++						"`apple_id` block or it must exist in the environment as AC_PASSWORD,\n"+
++						"otherwise we won't be able to authenticate with Apple to notarize.\n"+
++						"\n"+
++						"Alternatively, you can use a keychain profile with the `keychain_profile` option.\n")
++				return 1
++			}
+
+-	if cfg.AppleId.Password == "" {
+-		if _, ok := os.LookupEnv("AC_PASSWORD"); !ok {
+-			color.New(color.Bold, color.FgRed).Fprintf(os.Stdout, "❗️ No apple_id password provided\n")
+-			color.New(color.FgRed).Fprintf(os.Stdout,
+-				"An Apple ID password (or lookup directive) must be specified in the\n"+
+-					"`apple_id` block or it must exist in the environment as AC_PASSWORD,\n"+
+-					"otherwise we won't be able to authenticate with Apple to notarize.\n")
+-			return 1
++			cfg.AppleId.Password = "@env:AC_PASSWORD"
+ 		}
+
+-		cfg.AppleId.Password = "@env:AC_PASSWORD"
+-	}
+-	if cfg.AppleId.Provider == "" {
+-		cfg.AppleId.Provider = os.Getenv("AC_PROVIDER")
++		// TeamId validation - check both TeamId and Provider (backwards compatibility)
++		if cfg.AppleId.TeamId == "" {
++			// Try environment variable first
++			if teamId := os.Getenv("AC_TEAM_ID"); teamId != "" {
++				cfg.AppleId.TeamId = teamId
++			} else if cfg.AppleId.Provider == "" {
++				// Fall back to AC_PROVIDER for backwards compatibility
++				if provider := os.Getenv("AC_PROVIDER"); provider != "" {
++					cfg.AppleId.Provider = provider
++					color.New(color.FgYellow).Fprintf(os.Stdout,
++						"⚠️  Using deprecated 'provider' field. Please update to use 'team_id' instead.\n")
++				} else {
++					color.New(color.Bold, color.FgRed).Fprintf(os.Stdout, "❗️ No team_id provided\n")
++					color.New(color.FgRed).Fprintf(os.Stdout,
++						"A Team ID must be specified in the `apple_id` block as `team_id` or\n"+
++							"it must exist in the environment as AC_TEAM_ID.\n"+
++							"You can find your Team ID at https://developer.apple.com/account\n"+
++							"\n"+
++							"Alternatively, you can use a keychain profile with the `keychain_profile` option.\n")
++					return 1
++				}
++			}
++		}
++	} else {
++		// Using keychain profile
++		color.New(color.FgCyan).Fprintf(os.Stdout, "Using keychain profile: %s\n", cfg.AppleId.KeychainProfile)
+ 	}
+
+ 	// If we're in source mode, then sign & package as configured
+diff --git a/internal/config/config.go b/internal/config/config.go
+index 8c8706e..6c96e87 100644
+--- a/internal/config/config.go
++++ b/internal/config/config.go
+@@ -34,6 +34,7 @@ type Config struct {
+ type AppleId struct {
+ 	// Username is your AC username, typically an email. This is required, but will
+ 	// be read from the environment via AC_USERNAME if not specified via config.
++	// Not needed if KeychainProfile is specified.
+ 	Username string `hcl:"username,optional"`
+
+ 	// Password is the password for your AC account. This also accepts
+@@ -41,12 +42,22 @@ type AppleId struct {
+ 	// the keychain and '@env:<name>' which reads the password from an
+ 	// an environmental variable named <name>. If omitted, it has the same effect
+ 	// as passing '@env:AC_PASSWORD'.
++	// Not needed if KeychainProfile is specified.
+ 	Password string `hcl:"password,optional"`
+
+-	// Provider is the AC provider. This is optional and only needs to be
+-	// specified if you're using an Apple ID account that has multiple
+-	// teams.
++	// TeamId is the Apple Developer Team ID. This is required for notarytool
++	// and can be found at https://developer.apple.com/account (Team ID).
++	// Not needed if KeychainProfile is specified.
++	TeamId string `hcl:"team_id,optional"`
++
++	// Provider is the AC provider (deprecated, use TeamId instead).
++	// This is kept for backwards compatibility but TeamId is preferred.
+ 	Provider string `hcl:"provider,optional"`
++
++	// KeychainProfile is the name of a keychain profile created with
++	// 'xcrun notarytool store-credentials'. If specified, Username, Password,
++	// and TeamId are not required as they're stored in the keychain.
++	KeychainProfile string `hcl:"keychain_profile,optional"`
+ }
+
+ // Notarize are the options for notarizing a pre-built file.
+diff --git a/notarize/info.go b/notarize/info.go
+index 4c3f518..e938b60 100644
+--- a/notarize/info.go
++++ b/notarize/info.go
+@@ -3,13 +3,14 @@ package notarize
+ import (
+ 	"bytes"
+ 	"context"
++	"encoding/json"
+ 	"fmt"
+ 	"io"
+ 	"os/exec"
+ 	"path/filepath"
++	"strings"
+
+ 	"github.com/hashicorp/go-hclog"
+-	"howett.net/plist"
+ )
+
+ // Info is the information structure for the state of a notarization request.
+@@ -22,19 +23,20 @@ type Info struct {
+ 	// RequestUUID is the UUID provided by Apple after submitting the
+ 	// notarization request. This can be used to look up notarization information
+ 	// using the Apple tooling.
+-	RequestUUID string `plist:"id"`
++	RequestUUID string `json:"id"`
+
+ 	// Date is the date and time of submission
+-	Date string `plist:"createdDate"`
++	Date string `json:"createdDate"`
+
+-	// Name is th file uploaded for submission.
+-	Name string `plist:"name"`
++	// Name is the file uploaded for submission.
++	Name string `json:"name"`
+
+ 	// Status the status of the notarization.
+-	Status string `plist:"status"`
++	// Possible values: "Accepted", "In Progress", "Invalid", "Rejected"
++	Status string `json:"status"`
+
+ 	// StatusMessage is a human-friendly message associated with a status.
+-	StatusMessage string `plist:"message"`
++	StatusMessage string `json:"message"`
+ }
+
+ // info requests the information about a notarization and returns
+@@ -61,35 +63,65 @@ func info(ctx context.Context, uuid string, opts *Options) (*Info, error) {
+ 		cmd.Path = path
+ 	}
+
+-	cmd.Args = []string{
++	// Build args based on whether we're using keychain profile or direct credentials
++	args := []string{
+ 		filepath.Base(cmd.Path),
+ 		"notarytool",
+ 		"info",
+ 		uuid,
+-		"--apple-id", opts.DeveloperId,
+-		"--password", opts.Password,
+-		"--team-id", opts.Provider,
+-		"--output-format", "plist",
+ 	}
+
++	// Use keychain profile if specified, otherwise use direct credentials
++	if opts.KeychainProfile != "" {
++		args = append(args, "--keychain-profile", opts.KeychainProfile)
++	} else {
++		// Direct credentials mode
++		if opts.DeveloperId == "" || opts.Password == "" || opts.TeamId == "" {
++			return nil, fmt.Errorf("apple_id credentials are required when not using keychain profile")
++		}
++
++		args = append(args,
++			"--apple-id", opts.DeveloperId,
++			"--password", opts.Password,
++			"--team-id", opts.TeamId,
++		)
++	}
++
++	// Always request JSON output for easier parsing
++	args = append(args, "--output-format", "json")
++
++	cmd.Args = args
++
+ 	// We store all output in out for logging and in case there is an error
+ 	var out, combined bytes.Buffer
+ 	cmd.Stdout = io.MultiWriter(&out, &combined)
+ 	cmd.Stderr = &combined
+
+-	// Log what we're going to execute
++	// Log what we're going to execute (sanitize password)
++	sanitizedArgs := make([]string, len(cmd.Args))
++	copy(sanitizedArgs, cmd.Args)
++	for i := range sanitizedArgs {
++		if i > 0 && sanitizedArgs[i-1] == "--password" {
++			sanitizedArgs[i] = "***REDACTED***"
++		}
++	}
++
+ 	logger.Info("requesting notarization info",
+ 		"uuid", uuid,
+ 		"command_path", cmd.Path,
+-		"command_args", cmd.Args,
++		"command_args", sanitizedArgs,
+ 	)
+
+ 	// Execute
+ 	err := cmd.Run()
+
+-	// Log the result
++	// Log the result (sanitize sensitive info)
++	sanitizedOutput := out.String()
++	if opts.Password != "" {
++		sanitizedOutput = strings.ReplaceAll(sanitizedOutput, opts.Password, "***REDACTED***")
++	}
+ 	logger.Info("notarization info command finished",
+-		"output", out.String(),
++		"output", sanitizedOutput,
+ 		"err", err,
+ 	)
+
+@@ -97,8 +129,12 @@ func info(ctx context.Context, uuid string, opts *Options) (*Info, error) {
+ 	// an error it will output some information.
+ 	var result Info
+ 	if out.Len() > 0 {
+-		if _, perr := plist.Unmarshal(out.Bytes(), &result); perr != nil {
+-			return nil, fmt.Errorf("failed to decode notarization submission output: %w", perr)
++		if jerr := json.Unmarshal(out.Bytes(), &result); jerr != nil {
++			logger.Error("failed to parse notarytool info output as JSON",
++				"error", jerr,
++				"output", sanitizedOutput,
++			)
++			return nil, fmt.Errorf("failed to decode notarization info output: %w\nOutput: %s", jerr, sanitizedOutput)
+ 		}
+ 	}
+
+diff --git a/notarize/log.go b/notarize/log.go
+index c2ac6cc..ada67fb 100644
+--- a/notarize/log.go
++++ b/notarize/log.go
+@@ -8,6 +8,7 @@ import (
+ 	"io"
+ 	"os/exec"
+ 	"path/filepath"
++	"strings"
+
+ 	"github.com/hashicorp/go-hclog"
+ )
+@@ -64,53 +65,83 @@ func log(ctx context.Context, uuid string, opts *Options) (*Log, error) {
+ 		cmd.Path = path
+ 	}
+
+-	cmd.Args = []string{
++	// Build args based on whether we're using keychain profile or direct credentials
++	args := []string{
+ 		filepath.Base(cmd.Path),
+ 		"notarytool",
+ 		"log",
+ 		uuid,
+-		"--apple-id", opts.DeveloperId,
+-		"--password", opts.Password,
+-		"--team-id", opts.Provider,
+ 	}
+
++	// Use keychain profile if specified, otherwise use direct credentials
++	if opts.KeychainProfile != "" {
++		args = append(args, "--keychain-profile", opts.KeychainProfile)
++	} else {
++		// Direct credentials mode
++		if opts.DeveloperId == "" || opts.Password == "" || opts.TeamId == "" {
++			return nil, fmt.Errorf("apple_id credentials are required when not using keychain profile")
++		}
++
++		args = append(args,
++			"--apple-id", opts.DeveloperId,
++			"--password", opts.Password,
++			"--team-id", opts.TeamId,
++		)
++	}
++
++	cmd.Args = args
++
+ 	// We store all output in out for logging and in case there is an error
+ 	var out, combined bytes.Buffer
+ 	cmd.Stdout = io.MultiWriter(&out, &combined)
+ 	cmd.Stderr = &combined
+
+-	// Log what we're going to execute
++	// Log what we're going to execute (sanitize password)
++	sanitizedArgs := make([]string, len(cmd.Args))
++	copy(sanitizedArgs, cmd.Args)
++	for i := range sanitizedArgs {
++		if i > 0 && sanitizedArgs[i-1] == "--password" {
++			sanitizedArgs[i] = "***REDACTED***"
++		}
++	}
++
+ 	logger.Info("requesting notarization log",
+ 		"uuid", uuid,
+ 		"command_path", cmd.Path,
+-		"command_args", cmd.Args,
++		"command_args", sanitizedArgs,
+ 	)
+
+ 	// Execute
+ 	err := cmd.Run()
+
+-	// Log the result
++	// Log the result (sanitize sensitive info)
++	sanitizedOutput := out.String()
++	if opts.Password != "" {
++		sanitizedOutput = strings.ReplaceAll(sanitizedOutput, opts.Password, "***REDACTED***")
++	}
+ 	logger.Info("notarization log command finished",
+-		"output", out.String(),
++		"output", sanitizedOutput,
+ 		"err", err,
+ 	)
+
+ 	// If we have any output, try to decode that since even in the case of
+ 	// an error it will output some information.
+ 	var result Log
+-	// return &result, json.NewDecoder().Decode(&result)
+ 	if out.Len() > 0 {
+ 		if derr := json.Unmarshal(out.Bytes(), &result); derr != nil {
+-			return nil, fmt.Errorf("failed to decode notarization submission output: %w", derr)
+-
++			logger.Error("failed to parse notarytool log output as JSON",
++				"error", derr,
++				"output", sanitizedOutput,
++			)
++			return nil, fmt.Errorf("failed to decode notarization log output: %w\nOutput: %s", derr, sanitizedOutput)
+ 		}
+ 	}
+
+ 	// Now we check the error for actually running the process
+ 	if err != nil {
+-		return nil, fmt.Errorf("error checking on notarization status:\n\n%s", combined.String())
++		return nil, fmt.Errorf("error retrieving notarization log:\n\n%s", combined.String())
+ 	}
+
+-	logger.Info("notarization log", "uuid", uuid, "info", result)
++	logger.Info("notarization log retrieved", "uuid", uuid, "status", result.Status)
+ 	return &result, nil
+ }
+diff --git a/notarize/notarize.go b/notarize/notarize.go
+index c235917..13d2b88 100644
+--- a/notarize/notarize.go
++++ b/notarize/notarize.go
+@@ -6,7 +6,6 @@ import (
+ 	"fmt"
+ 	"os/exec"
+ 	"sync"
+-	"time"
+
+ 	"github.com/hashicorp/go-hclog"
+ )
+@@ -17,18 +16,28 @@ type Options struct {
+ 	File string
+
+ 	// DeveloperId is your Apple Developer Apple ID.
++	// Not needed if KeychainProfile is specified.
+ 	DeveloperId string
+
+ 	// Password is your Apple Connect password. This must be specified.
+ 	// This also supports `@keychain:<value>` and `@env:<value>` formats to
+ 	// read from the keychain and environment variables, respectively.
++	// Not needed if KeychainProfile is specified.
+ 	Password string
+
+-	// Provider is the Apple Connect provider to use. This is optional
+-	// and is only used for Apple Connect accounts that support multiple
+-	// providers.
++	// TeamId is your Apple Developer Team ID. This is required for notarytool.
++	// Not needed if KeychainProfile is specified.
++	TeamId string
++
++	// Provider is the Apple Connect provider (deprecated, use TeamId instead).
++	// This is kept for backwards compatibility but TeamId is preferred.
+ 	Provider string
+
++	// KeychainProfile is the name of a keychain profile created with
++	// 'xcrun notarytool store-credentials'. If specified, DeveloperId, Password,
++	// and TeamId are not required.
++	KeychainProfile string
++
+ 	// UploadLock, if specified, will limit concurrency when uploading
+ 	// packages. The notary submission process does not allow concurrent
+ 	// uploads of packages with the same bundle ID, it appears. If you set
+@@ -74,7 +83,14 @@ func Notarize(ctx context.Context, opts *Options) (*Info, *Log, error) {
+ 		lock = &sync.Mutex{}
+ 	}
+
+-	// First perform the upload
++	// Backwards compatibility: use TeamId if Provider is set but TeamId is not
++	if opts.TeamId == "" && opts.Provider != "" {
++		logger.Warn("using deprecated 'provider' field as team_id, please update config to use 'team_id'")
++		opts.TeamId = opts.Provider
++	}
++
++	// First perform the upload with --wait flag
++	// This will block until notarization is complete or fails
+ 	lock.Lock()
+ 	status.Submitting()
+ 	uuid, err := upload(ctx, opts)
+@@ -84,101 +100,60 @@ func Notarize(ctx context.Context, opts *Options) (*Info, *Log, error) {
+ 	}
+ 	status.Submitted(uuid)
+
+-	// Begin polling the info. The first thing we wait for is for the status
+-	// _to even exist_. While we get an error requesting info with an error
+-	// code of 1519 (UUID not found), then we are stuck in a queue. Sometimes
+-	// this queue is hours long. We just have to wait.
+-	infoResult := &Info{RequestUUID: uuid}
+-	for {
+-		time.Sleep(10 * time.Second)
+-		_, err := info(ctx, infoResult.RequestUUID, opts)
+-		if err == nil {
+-			break
+-		}
+-
+-		// If we got error code 1519 that means that the UUID was not found.
+-		// This means we're in a queue.
+-		if e, ok := err.(Errors); ok && e.ContainsCode(1519) {
+-			continue
+-		}
++	logger.Info("notarization submitted, waiting for completion", "uuid", uuid)
+
+-		// A real error, just return that
+-		return infoResult, nil, err
++	// Since we used --wait in upload, the notarization should be complete now
++	// Let's get the final info
++	infoResult, err := info(ctx, uuid, opts)
++	if err != nil {
++		// If we can't get info, still return the UUID for debugging
++		return &Info{RequestUUID: uuid}, nil, fmt.Errorf("failed to get notarization info: %w", err)
+ 	}
+
+-	// Now that the UUID result has been found, we poll more quickly
+-	// waiting for the analysis to complete. This usually happens within
+-	// minutes.
+-	for {
+-		// Update the info. It is possible for this to return a nil info
+-		// and we dont' ever want to set result to nil so we have a check.
+-		newInfoResult, err := info(ctx, infoResult.RequestUUID, opts)
+-		if newInfoResult != nil {
+-			infoResult = newInfoResult
+-		}
+-
+-		if err != nil {
+-			// This code is the network became unavailable error. If this
+-			// happens then we just log and retry.
+-			if e, ok := err.(Errors); ok && e.ContainsCode(-19000) {
+-				logger.Warn("error that network became unavailable, will retry")
+-				goto RETRYINFO
+-			}
+-
+-			return infoResult, nil, err
+-		}
+-
+-		status.InfoStatus(*infoResult)
+-
+-		// If we reached a terminal state then exit
+-		if infoResult.Status == "Accepted" || infoResult.Status == "Invalid" {
+-			break
+-		}
+-
+-	RETRYINFO:
+-		// Sleep, we just do a constant poll every 5 seconds. I haven't yet
+-		// found any rate limits to the service so this seems okay.
+-		time.Sleep(5 * time.Second)
++	status.InfoStatus(*infoResult)
++	logger.Info("notarization info retrieved",
++		"uuid", uuid,
++		"status", infoResult.Status,
++		"message", infoResult.StatusMessage,
++	)
++
++	// Get the detailed log
++	logResult, logErr := log(ctx, uuid, opts)
++	if logErr != nil {
++		logger.Warn("failed to retrieve notarization log", "error", logErr)
++		// Log retrieval is not critical, continue with info result
++	} else {
++		status.LogStatus(*logResult)
++		logger.Info("notarization log retrieved", "uuid", uuid, "issues_count", len(logResult.Issues))
+ 	}
+
+-	logResult := &Log{JobId: uuid}
+-	for {
+-		// Update the log. It is possible for this to return a nil log
+-		// and we dont' ever want to set result to nil so we have a check.
+-		newLogResult, err := log(ctx, logResult.JobId, opts)
+-		if newLogResult != nil {
+-			logResult = newLogResult
++	// Check the final status
++	if infoResult.Status == "Invalid" || infoResult.Status == "Rejected" {
++		// Build a detailed error message
++		errMsg := fmt.Sprintf("notarization failed with status '%s'", infoResult.Status)
++		if infoResult.StatusMessage != "" {
++			errMsg += fmt.Sprintf(": %s", infoResult.StatusMessage)
+ 		}
+
+-		if err != nil {
+-			// This code is the network became unavailable error. If this
+-			// happens then we just log and retry.
+-			if e, ok := err.(Errors); ok && e.ContainsCode(-19000) {
+-				logger.Warn("error that network became unavailable, will retry")
+-				goto RETRYLOG
++		// Add issues from log if available
++		if logResult != nil && len(logResult.Issues) > 0 {
++			errMsg += "\n\nIssues found:"
++			for i, issue := range logResult.Issues {
++				if i >= 5 {
++					errMsg += fmt.Sprintf("\n  ... and %d more issues", len(logResult.Issues)-5)
++					break
++				}
++				errMsg += fmt.Sprintf("\n  [%s] %s: %s", issue.Severity, issue.Path, issue.Message)
+ 			}
+-
+-			return infoResult, logResult, err
+-		}
+-
+-		status.LogStatus(*logResult)
+-
+-		// If we reached a terminal state then exit
+-		if logResult.Status == "Accepted" || logResult.Status == "Invalid" {
+-			break
+ 		}
+
+-	RETRYLOG:
+-		// Sleep, we just do a constant poll every 5 seconds. I haven't yet
+-		// found any rate limits to the service so this seems okay.
+-		time.Sleep(5 * time.Second)
++		return infoResult, logResult, fmt.Errorf(errMsg)
+ 	}
+
+-	// If we're in an invalid status then return an error
+-	err = nil
+-	if logResult.Status == "Invalid" && infoResult.Status == "Invalid" {
+-		err = fmt.Errorf("package is invalid.")
++	if infoResult.Status != "Accepted" {
++		return infoResult, logResult, fmt.Errorf("unexpected notarization status: %s", infoResult.Status)
+ 	}
+
+-	return infoResult, logResult, err
++	logger.Info("notarization successful", "uuid", uuid)
++	return infoResult, logResult, nil
+ }
+diff --git a/notarize/upload.go b/notarize/upload.go
+index 960a4cb..f52d9d0 100644
+--- a/notarize/upload.go
++++ b/notarize/upload.go
+@@ -3,13 +3,14 @@ package notarize
+ import (
+ 	"bytes"
+ 	"context"
++	"encoding/json"
+ 	"fmt"
+ 	"io"
+ 	"os/exec"
+ 	"path/filepath"
++	"strings"
+
+ 	"github.com/hashicorp/go-hclog"
+-	"howett.net/plist"
+ )
+
+ // upload submits the file for notarization and returns the request UUID
+@@ -36,66 +37,130 @@ func upload(ctx context.Context, opts *Options) (string, error) {
+ 		cmd.Path = path
+ 	}
+
+-	cmd.Args = []string{
++	// Build args based on whether we're using keychain profile or direct credentials
++	args := []string{
+ 		filepath.Base(cmd.Path),
+ 		"notarytool",
+ 		"submit", opts.File,
+-		"--apple-id", opts.DeveloperId,
+-		"--password", opts.Password,
+-		"--team-id", opts.Provider,
+-		"--output-format", "plist",
+ 	}
+
++	// Use keychain profile if specified, otherwise use direct credentials
++	if opts.KeychainProfile != "" {
++		args = append(args, "--keychain-profile", opts.KeychainProfile)
++		logger.Info("using keychain profile for authentication", "profile", opts.KeychainProfile)
++	} else {
++		// Direct credentials mode
++		if opts.DeveloperId == "" {
++			return "", fmt.Errorf("apple_id username is required when not using keychain profile")
++		}
++		if opts.Password == "" {
++			return "", fmt.Errorf("apple_id password is required when not using keychain profile")
++		}
++		if opts.TeamId == "" {
++			return "", fmt.Errorf("apple_id team_id is required when not using keychain profile")
++		}
++
++		args = append(args,
++			"--apple-id", opts.DeveloperId,
++			"--password", opts.Password,
++			"--team-id", opts.TeamId,
++		)
++	}
++
++	// Always request JSON output for easier parsing
++	args = append(args, "--output-format", "json")
++
++	// Add wait flag to block until initial processing is done
++	args = append(args, "--wait")
++
++	cmd.Args = args
++
+ 	// We store all output in out for logging and in case there is an error
+ 	var out, combined bytes.Buffer
+ 	cmd.Stdout = io.MultiWriter(&out, &combined)
+ 	cmd.Stderr = &combined
+
+-	// Log what we're going to execute
++	// Log what we're going to execute (sanitize password)
++	sanitizedArgs := make([]string, len(cmd.Args))
++	copy(sanitizedArgs, cmd.Args)
++	for i := range sanitizedArgs {
++		if i > 0 && sanitizedArgs[i-1] == "--password" {
++			sanitizedArgs[i] = "***REDACTED***"
++		}
++	}
++
+ 	logger.Info("submitting file for notarization",
+ 		"file", opts.File,
+ 		"command_path", cmd.Path,
+-		"command_args", cmd.Args,
++		"command_args", sanitizedArgs,
+ 	)
+
+ 	// Execute
+ 	err := cmd.Run()
+
+-	// Log the result
++	// Log the result (sanitize sensitive info)
++	sanitizedOutput := strings.ReplaceAll(out.String(), opts.Password, "***REDACTED***")
+ 	logger.Info("notarization submission complete",
+-		"output", out.String(),
++		"output", sanitizedOutput,
+ 		"err", err,
+ 	)
+
+-	// If we have any output, try to decode that since even in the case of
+-	// an error it will output some information.
++	// If we have any output, try to decode JSON
+ 	var result uploadResult
+ 	if out.Len() > 0 {
+-		if _, perr := plist.Unmarshal(out.Bytes(), &result); perr != nil {
+-			return "", fmt.Errorf("failed to decode notarization submission output: %w", perr)
++		if jerr := json.Unmarshal(out.Bytes(), &result); jerr != nil {
++			// If JSON parsing fails, log the raw output for debugging
++			logger.Error("failed to parse notarytool output as JSON",
++				"error", jerr,
++				"output", sanitizedOutput,
++			)
++			return "", fmt.Errorf("failed to decode notarization submission output: %w\nOutput: %s", jerr, sanitizedOutput)
+ 		}
+ 	}
+
+ 	// Now we check the error for actually running the process
+ 	if err != nil {
+-		return "", fmt.Errorf("error submitting for notarization:\n\n%s", combined.String())
++		// Try to extract meaningful error message from the output
++		errorMsg := combined.String()
++		if result.Message != "" {
++			errorMsg = result.Message
++		}
++		return "", fmt.Errorf("error submitting for notarization: %s\n\nFull output:\n%s", errorMsg, combined.String())
+ 	}
+
+ 	// We should have a request UUID set at this point since we checked for errors
+-	if result.RequestUUID == "" {
++	if result.ID == "" {
+ 		return "", fmt.Errorf(
+-			"notarization appeared to succeed, but we failed at parsing " +
+-				"the request UUID. Please enable logging, try again, and report " +
+-				"this as a bug.")
++			"notarization appeared to succeed, but we failed at parsing "+
++				"the request UUID. Please enable logging, try again, and report "+
++				"this as a bug. Output: %s", sanitizedOutput)
+ 	}
+
+-	logger.Info("notarization request submitted", "request_id", result.RequestUUID)
+-	return result.RequestUUID, nil
++	// Check the status
++	if result.Status == "Invalid" {
++		return result.ID, fmt.Errorf("notarization failed: %s", result.Message)
++	}
+
++	logger.Info("notarization request submitted",
++		"request_id", result.ID,
++		"status", result.Status,
++		"message", result.Message,
++	)
++
++	return result.ID, nil
+ }
+
+-// uploadResult is the plist structure when the upload succeeds
++// uploadResult is the JSON structure returned by notarytool submit
+ type uploadResult struct {
+-	// Upload is non-nil if there is a successful upload
+-	RequestUUID string `plist:"id"`
++	// ID is the submission ID (UUID)
++	ID string `json:"id"`
++
++	// Status is the current status of the submission
++	Status string `json:"status"`
++
++	// Message provides additional information about the submission
++	Message string `json:"message"`
++
++	// CreatedDate is when the submission was created
++	CreatedDate string `json:"createdDate"`
+ }
+diff --git a/package/dmg/dmg.go b/package/dmg/dmg.go
+index c3937fe..f91babf 100644
+--- a/package/dmg/dmg.go
++++ b/package/dmg/dmg.go
+@@ -85,11 +85,13 @@ func Dmg(ctx context.Context, opts *Options) error {
+ 	args := []string{
+ 		filepath.Base(cmd.Path), // argv[0]
+ 		"--volname", opts.VolumeName,
++		"--sandbox-safe",                // Skip bless command (doesn't work on Apple Silicon)
++		"--app-drop-link", "600", "185", // Add Applications folder symlink at position
+ 	}
+
+ 	// Inject our files
+ 	for _, f := range opts.Files {
+-		args = append(args, "--add-file", filepath.Base(f), f, "0", "0")
++		args = append(args, "--add-file", filepath.Base(f), f, "10", "10")
+ 	}
+
+ 	// Set our root directory. If one wasn't specified, we create an empty
