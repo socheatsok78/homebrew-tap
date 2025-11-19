@@ -8,9 +8,10 @@ class Gon < Formula
 
   bottle do
     root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/gon-0.2.5"
-    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "2f483c95c82d0f39198cb202d9a1b98fbf2074a3abff2706c33abe64cd321cf3"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "92fb86533b04e894f216162e258fde18a52627ec5f82cd56cbff95341389c301"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "486dbf51fd2c5294c83db5ab9ff3f2338cbd22df11c1a471b81d5612e0b9fe76"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "752fba92d26598193b357bf9c81fa1c06f30573cec079f4aebfe798afdfa097e"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f2f4b445fabe2e1d6606182307c4493b343522695ea1100ae50857cdd8c57b07"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "0498bbafc71b2403137730d87d5ce8bfce335df0cd965566a466b617fc0035b6"
   end
 
   depends_on "go" => :build
