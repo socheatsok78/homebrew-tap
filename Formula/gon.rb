@@ -20,6 +20,10 @@ class Gon < Formula
     url "https://github.com/mitchellh/gon/compare/master...winash:go-notarize:master.patch"
     sha256 "b6d8a86aa069c119f960a37cec61428fa5b90ec3ddb5c6b679a6a6775ea86e00"
   end
+  patch do
+    url "https://github.com/winash/go-notarize/compare/master...socheatsok78-lab:go-notarize:master.patch"
+    sha256 "84473fa5848e30e1709d8ae4160bdac45f386ae41981997684c4c4f9ab6e5f72"
+  end
 
   def install
     system "go", "build", "-ldflags", "-s -w -X main.version=#{version}", "-trimpath", "-o", bin/"gon", "./cmd/gon"
