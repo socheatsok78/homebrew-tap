@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+if [ -z "$1" ]; then
+  echo "Usage: $0 <formula|cask>"
+  exit 1
+fi
+if [ ! -d "/opt/homebrew/Library/Taps/socheatsok78/homebrew-tap" ]; then
+    brew tap socheatsok78/tap
+fi
+code "/opt/homebrew/Library/Taps/socheatsok78/homebrew-tap/${1}"
