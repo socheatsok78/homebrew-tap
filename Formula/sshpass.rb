@@ -7,10 +7,10 @@ class Sshpass < Formula
 
   bottle do
     root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/sshpass-1.10"
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "23ef38f4eb892f2136e5501a00e9328392fec76b56e79a9a6536de2e288da575"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "e78f894ad8438808c379f3876bf9109e4395c0977e7afc2a7e212730eb02cd63"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "dc1d517012c013a49a21105a77b2e00f503cdae1c06dc35e9f843f23ef5f675a"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "48303385502b547ca6e41b4187b18500c65c01d52dfc20ec1bf6f007f956bd57"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "6017d162f964e81f514205c8e805858ba18d24c57e6f86647a6971d82cd324bf"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ffac544a5747b7e43a55c383fd818f173ddde4e5412fa6b35b7c5a64e131ce99"
   end
 
   def install
