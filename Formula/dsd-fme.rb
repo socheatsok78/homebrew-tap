@@ -29,11 +29,6 @@ class DsdFme < Formula
     depends_on "llvm@17" if DevelopmentTools.clang_build_version <= 1500
   end
 
-  fails_with :clang do
-    build 1500
-    cause "Requires C++17"
-  end
-
   def install
     args = []
 
