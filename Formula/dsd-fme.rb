@@ -21,9 +21,10 @@ class DsdFme < Formula
   depends_on "codec2"
   depends_on "librtlsdr"
   depends_on "libsndfile"
-  depends_on "ncurses"
   depends_on "pulseaudio"
   depends_on "socheatsok78/tap/mbelib-lwvmobile"
+
+  uses_from_macos "ncurses"
 
   on_macos do
     depends_on "llvm@17" if DevelopmentTools.clang_build_version <= 1500
