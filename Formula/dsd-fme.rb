@@ -2,8 +2,8 @@ class DsdFme < Formula
   desc "Digital Speech Decoder - Florida Man Edition"
   homepage "https://github.com/lwvmobile/dsd-fme"
   url "https://github.com/lwvmobile/dsd-fme.git",
-      revision: "abf28593b1b1802262128683d536aa2938285ba6"
-  version "2025-12-15"
+      revision: "ed1d1d630ce79db890bbf4b890317341bc5aa580"
+  version "2026-03-28"
   license "ISC"
   head "https://github.com/lwvmobile/dsd-fme.git", branch: "audio_work"
 
@@ -19,7 +19,6 @@ class DsdFme < Formula
   depends_on "cmake" => :build
   depends_on "pkgconf" => :build
   depends_on "codec2"
-  depends_on "itpp"
   depends_on "librtlsdr"
   depends_on "libsndfile"
   depends_on "ncurses"
