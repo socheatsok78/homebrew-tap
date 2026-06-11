@@ -14,7 +14,7 @@ cask "chirp@next" do
   end
 
   conflicts_with cask: "chirp"
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "CHIRP.app"
 

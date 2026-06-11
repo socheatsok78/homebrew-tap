@@ -16,7 +16,7 @@ cask "sdrangel" do
     regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
 
   app "SDRangel.app"
 
