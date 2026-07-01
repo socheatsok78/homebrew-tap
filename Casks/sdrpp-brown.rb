@@ -1,13 +1,15 @@
 cask "sdrpp-brown" do
   arch arm: "arm", intel: "intel"
 
-  version "latest"
+  version :latest
   sha256 :no_check
 
   url "https://github.com/sannysanoff/SDRPlusPlusBrown/releases/download/stable/sdrpp_macos_#{arch}.zip"
   name "SDR++Brown"
   desc "Cross-Platform SDR Software (Brown Edition)"
   homepage "https://github.com/sannysanoff/SDRPlusPlusBrown"
+
+  depends_on :macos
 
   conflicts_with cask: "sdrpp-brown@nightly"
   suite "SDR++Brown.app"

@@ -11,6 +11,8 @@ cask "khmer-unicode-layout" do
     regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 
+  depends_on :macos
+
   pkg "Khmer.Unicode.pkg", allow_untrusted: true
 
   uninstall pkgutil: "com.github.socheatsok78.khmer-unicode"

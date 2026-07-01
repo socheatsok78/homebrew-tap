@@ -6,5 +6,7 @@ cask "octoscreen" do
   name "octoscreen"
   homepage "https://github.com/socheatsok78-lab/octoscreen/"
 
+  depends_on :macos
+
   screen_saver "Octoscreen.saver"
 end

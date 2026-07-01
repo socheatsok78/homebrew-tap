@@ -14,6 +14,8 @@ cask "sdrpp@nightly" do
     strategy :github_latest
   end
 
+  depends_on :macos
+
   suite "SDR++.app"
 
   zap trash: "~/Library/Application Support/sdrpp"

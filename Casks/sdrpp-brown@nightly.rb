@@ -9,6 +9,8 @@ cask "sdrpp-brown@nightly" do
   desc "Cross-Platform SDR Software (Brown Edition)"
   homepage "https://github.com/sannysanoff/SDRPlusPlusBrown"
 
+  depends_on :macos
+
   suite "SDR++Brown.app"
 
   zap trash: "~/Library/Application Support/sdrpp-brown"

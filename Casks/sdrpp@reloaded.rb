@@ -9,6 +9,8 @@ cask "sdrpp@reloaded" do
   desc "Cross-Platform SDR Software (Reloaded)"
   homepage "https://github.com/socheatsok78/SDRPlusPlusReloaded"
 
+  depends_on :macos
+
   suite "SDR++.app", target: "SDR++Reloaded.app"
 
   zap trash: "~/Library/Application Support/sdrpp"

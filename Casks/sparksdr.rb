@@ -10,6 +10,8 @@ cask "sparksdr" do
   desc "Cross-platform software for amateur radio using SDR hardware"
   homepage "https://www.sparksdr.com/"
 
+  depends_on :macos
+
   app "SparkSDR.app"
 
   zap trash: "~/Library/Application Support/SparkSDR"
