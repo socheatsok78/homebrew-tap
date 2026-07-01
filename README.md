@@ -7,10 +7,14 @@
 ## Usage
 
 ```sh
-# Add the tap
+# Add the tab to your Homebrew installation,
+# then trust it to install formulae and casks from it.
+#
+# Note: Only run these once, the tap will be available for future use.
 brew tap socheatsok78/tap
+brew trust socheatsok78/tap
 
-# Install formula or cask
+# Once the tap is added, you can install formulae and casks from it with:
 brew install socheatsok78/tap/<formula or cask name>
 ```
 
