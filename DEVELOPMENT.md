@@ -8,6 +8,11 @@ HOMEBREW_NO_INSTALL_FROM_API=1 brew test <formula>
 /opt/homebrew/Library/Taps/socheatsok78/homebrew-tap/Formula/<formula>.rb
 ```
 
+Style check:
+```
+brew style socheatsok78/tap
+```
+
 
 ## Troubleshooting
 
