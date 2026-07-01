@@ -8,10 +8,10 @@ class DsdFme < Formula
   head "https://github.com/lwvmobile/dsd-fme.git", branch: "audio_work"
 
   bottle do
-    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/dsd-fme-2026-03-28"
-    sha256 cellar: :any, arm64_tahoe:   "81f86c14db153e1d2f8ab6a08ff9949917f10587f05301fbe50a137bdc7bbbdf"
-    sha256 cellar: :any, arm64_sequoia: "c4cff544e43c40d709a2d23db860924232db60618e13152b804f399f6e383980"
-    sha256 cellar: :any, arm64_sonoma:  "981643555db86f5de888a896dfbb3948e9bf266d96fdeeb68fcace66e1fc3c5e"
+    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/dsd-fme-2026-06-26"
+    sha256 cellar: :any, arm64_tahoe:   "e27d08d15ea771aee3dbecd8e804656b21f6ad3368750d3b0600b4516af10bfa"
+    sha256 cellar: :any, arm64_sequoia: "47df611b5d799e056a99461ceb6f827e6dc4aa344db91be38f8d5dab4007183f"
+    sha256 cellar: :any, arm64_sonoma:  "ea55e73ff86ba03985cf2b40e46e25c9ef25b549bd04515f2da166987973395e"
   end
 
   # no_autobump! because: :requires_manual_review
