@@ -1,6 +1,6 @@
 cask "chirp@next" do
-  version "20260508"
-  sha256 "6d0955edd607f112dee08e77e14d04970bcdbf2403dc7944a7d935a6271513cb"
+  version "20260626"
+  sha256 "3a7bc4bfd390895179dec265a42f30dab2813b2e88307d20accdd112cca5dc6d"
 
   url "https://github.com/homebrew-sdr/chirpmyradio-archive/releases/download/next-#{version}/chirp-next-#{version}.app.zip",
       verified: "github.com/homebrew-sdr/chirpmyradio-archive/"
