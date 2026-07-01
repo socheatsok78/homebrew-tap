@@ -9,9 +9,9 @@ cask "sdrpp-brown" do
   desc "Cross-Platform SDR Software (Brown Edition)"
   homepage "https://github.com/sannysanoff/SDRPlusPlusBrown"
 
+  conflicts_with cask: "sdrpp-brown@nightly"
   depends_on :macos
 
-  conflicts_with cask: "sdrpp-brown@nightly"
   suite "SDR++Brown.app"
 
   zap trash: "~/Library/Application Support/sdrpp-brown"
