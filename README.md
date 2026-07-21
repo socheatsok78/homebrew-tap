@@ -16,6 +16,9 @@ brew trust socheatsok78/tap
 
 # Once the tap is added, you can install formulae and casks from it with:
 brew install socheatsok78/tap/<formula or cask name>
+
+# List all available casks and formulae in this tap with:
+brew search socheatsok78/tap
 ```
 
 ## Casks
