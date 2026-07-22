@@ -11,7 +11,6 @@ cask "font-vegur" do
     skip "No version information available"
   end
 
-
   font "Vegur-Bold.otf"
   font "Vegur-Light.otf"
   font "Vegur-Regular.otf"
