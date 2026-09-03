@@ -49,7 +49,7 @@ class DsdFme < Formula
       args << "-DINSIGHTS_USE_SYSTEM_INCLUDES=OFF"
     end
 
-    system "cmake", ".", *args, *std_cmake_args
+    system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "make", "install"
   end
 
