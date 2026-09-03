@@ -2,8 +2,7 @@ cask "chirp@next" do
   version "20260626"
   sha256 "3a7bc4bfd390895179dec265a42f30dab2813b2e88307d20accdd112cca5dc6d"
 
-  url "https://github.com/homebrew-sdr/chirpmyradio-archive/releases/download/next-#{version}/chirp-next-#{version}.app.zip",
-      verified: "github.com/homebrew-sdr/chirpmyradio-archive/"
+  url "https://github.com/homebrew-sdr/chirpmyradio-archive/releases/download/next-#{version}/chirp-next-#{version}.app.zip"
   name "CHIRP"
   desc "Tool for programming amateur radio"
   homepage "https://chirp.danplanet.com/projects/chirp/wiki/Home"
