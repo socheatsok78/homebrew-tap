@@ -23,7 +23,7 @@ class M17Fme < Formula
   depends_on "socat"
 
   def install
-    system "cmake", ".", *std_cmake_args
+    system "cmake", "-S", ".", "-B", "build", *std_cmake_args
     system "make", "install"
   end
 
