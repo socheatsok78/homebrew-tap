@@ -13,7 +13,7 @@ cask "khmer-unicode-layout" do
 
   depends_on :macos
 
-  pkg "Khmer.Unicode.pkg", allow_untrusted: true
+  pkg "Khmer.Unicode.pkg"
 
   uninstall pkgutil: "com.github.socheatsok78.khmer-unicode"
 
