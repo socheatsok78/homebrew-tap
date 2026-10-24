@@ -15,8 +15,8 @@ cask "sdrtrunk" do
     regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 
-  depends_on :macos
   depends_on formula: "socheatsok78/tap/jmbe"
+  depends_on :macos
 
   jmbe = Formula["socheatsok78/tap/jmbe"]
 
