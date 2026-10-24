@@ -6,11 +6,9 @@ class Certstrap < Formula
   license "Apache-2.0"
 
   bottle do
-    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/certstrap-latest"
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "12e5a94f205fb530571f5c265e4c5d81232e19c055b0af25dd14f236dfb880ef"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "29d8f8a68924d1d53b9fb5ab2a927780c778cc37d754ff32c8739497a61993c9"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "f3a5855e01539791eaf3764caf787946db1f929b61c725468abb89d400296261"
+    root_url "https://github.com/socheatsok78/homebrew-tap/releases/download/certstrap-1.4.1"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:   "f1d7947b75ae2c1faa0fb48609c214a9a301d22cca5717044354a8c1a2e0bcd8"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "8d0d92467620dcfcacd9c8aa60cae21b1eef9a2e60d0b0cf757096b08f6f6f33"
   end
 
   depends_on "go" => :build
